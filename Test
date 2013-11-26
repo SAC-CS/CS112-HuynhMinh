@@ -1,0 +1,37 @@
+import javax.swing.JOptionPane;
+
+public class Test {
+
+	public static void main(String[] args) {
+		int row;
+		int col;
+		String rep1;
+		String rep2;
+		
+		TicTacToe computer = new TicTacToe();
+		computer.setTurn();
+		
+		while (computer.gameOver()== false) 
+		{
+			if (computer.getTurn()==1) 
+			{
+				rep1 = JOptionPane.showInputDialog("Enter what row you want to play?");
+				row = Integer.parseInt(rep1);
+				rep2 = JOptionPane.showInputDialog("Enter what collumn you want to play?");
+				col = Integer.parseInt(rep2);
+				computer.userPlay(row, col);
+			}
+			else
+			{
+				System.out.println("Computer is playing");
+				computer.random();
+				System.out.println("Done");
+				computer.Update();
+				System.out.print("\n");
+				computer.displayGameBoard();
+			}
+		} 
+		computer.displayWinner();
+		computer.displayGameBoard();
+	}
+}
