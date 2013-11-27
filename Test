@@ -20,6 +20,8 @@ public class Test {
 				rep2 = JOptionPane.showInputDialog("Enter what collumn you want to play?");
 				col = Integer.parseInt(rep2);
 				computer.userPlay(row, col);
+				computer.gameOver();
+				computer.switchTurn();
 			}
 			else
 			{
@@ -27,6 +29,8 @@ public class Test {
 				computer.random();
 				System.out.println("Done");
 				computer.Update();
+				computer.gameOver();
+				computer.switchTurn();
 				System.out.print("\n");
 				computer.displayGameBoard();
 			}
