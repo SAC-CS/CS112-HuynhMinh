@@ -10,7 +10,7 @@ public class TicTacToe {
 	private boolean compWin=false;
 	private boolean playerWin=false;
 	private boolean exitGame=false;
-	
+	private int counter=0;
 	public TicTacToe(){
 		gameBoard=new String[3][3];
 		for (int r=0;r<3;r++)
@@ -43,23 +43,35 @@ public class TicTacToe {
 			}
 		}
 	}
+	public void switchTurn(){
+		switch (turn)
+		{
+		case 1: turn=0;
+				break;
+		case 0: turn=1;
+				break;
+		}
+	}
 	public void random()
 	{
-		int col = (int) (Math.random()*2+1);
-		int row = (int) (Math.random()*2+1);
+		int col = (int) (Math.random()*3);
+		int row = (int) (Math.random()*3);
 		while(gameBoard[row][col]!=" "){
-		col=(int) (Math.random()*2+1);
-		row=(int) (Math.random()*2+1);
+		col=(int) (Math.random()*3);
+		row=(int) (Math.random()*3);
 		}
 		gameBoard[row][col]=compPlay;
-		turn=1;
+		counter++;
 	}
 	public void userPlay(int row,int collumn){
 		gameBoard[row][collumn]=userPlay;
-		turn=0;
+		counter++;
 	}
 	//Checking for whether computer wins or user wins
 	public boolean gameOver(){
+		if (counter==9){
+			exitGame=true;
+		}
 		if ((gameBoard[0][0]=="O")&(gameBoard[0][1]=="O")&(gameBoard[0][2]=="O")){
 			exitGame=true;
 			compWin=true;
