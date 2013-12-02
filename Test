@@ -1,41 +1,18 @@
-import javax.swing.JOptionPane;
+import java.awt.EventQueue;
+import java.awt.Graphics;
 
-public class Test {
-
+import javax.swing.JFrame;
+public class Test{
 	public static void main(String[] args) {
-		int row;
-		int col;
-		String rep1;
-		String rep2;
-		
-		TicTacToe computer = new TicTacToe();
-		computer.setTurn();
-		
-		while (computer.gameOver()== false) 
-		{
-			if (computer.getTurn()==1) 
-			{
-				rep1 = JOptionPane.showInputDialog("Enter what row you want to play?");
-				row = Integer.parseInt(rep1);
-				rep2 = JOptionPane.showInputDialog("Enter what collumn you want to play?");
-				col = Integer.parseInt(rep2);
-				computer.userPlay(row, col);
-				computer.gameOver();
-				computer.switchTurn();
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TicTacToe game = new TicTacToe();
+				    game.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-			else
-			{
-				System.out.println("Computer is playing");
-				computer.random();
-				System.out.println("Done");
-				computer.Update();
-				computer.gameOver();
-				computer.switchTurn();
-				System.out.print("\n");
-				computer.displayGameBoard();
-			}
-		} 
-		computer.displayWinner();
-		computer.displayGameBoard();
+		});
 	}
 }
