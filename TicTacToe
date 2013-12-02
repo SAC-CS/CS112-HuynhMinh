@@ -1,133 +1,400 @@
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.EventQueue;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-public class TicTacToe {
-	
-	private String[][] gameBoard;
-	private int turn; //User Turn:1 Computer Turn:0
-	
-	final String userPlay="X";
-	final String compPlay="O";
-	
-	private boolean compWin=false;
-	private boolean playerWin=false;
-	private boolean exitGame=false;
-	private int counter=0;
-	public TicTacToe(){
-		gameBoard=new String[3][3];
-		for (int r=0;r<3;r++)
-		{
-			for(int c=0;c<3;c++)
-			{
-				gameBoard[r][c]=" ";
-			}
-		}
-	}
-	public void setTurn(){
-		int rep;
-		rep=JOptionPane.showConfirmDialog(null,"Do you want to play first?");
-		if (rep==0){
-			turn=1;
-		}
-		else{
-			turn=0;
-		}
-	}
-	public int getTurn(){
-		return turn;
-	}
-	public void Update(){
-		for (int r=0;r<3;r++){
-			for(int c=0;c<3;c++){
-				if (gameBoard[r][c]==" "){
-					System.out.print("["+r+","+c+"] ");	
-				}
-			}
-		}
-	}
-	public void switchTurn(){
-		switch (turn)
-		{
-		case 1: turn=0;
-				break;
-		case 0: turn=1;
-				break;
-		}
-	}
-	public void random()
-	{
-		int col = (int) (Math.random()*3);
-		int row = (int) (Math.random()*3);
-		while(gameBoard[row][col]!=" "){
-		col=(int) (Math.random()*3);
-		row=(int) (Math.random()*3);
-		}
-		gameBoard[row][col]=compPlay;
-		counter++;
-	}
-	public void userPlay(int row,int collumn){
-		gameBoard[row][collumn]=userPlay;
-		counter++;
-	}
-	//Checking for whether computer wins or user wins
-	public boolean gameOver(){
-		if (counter==9){
-			exitGame=true;
-		}
-		if ((gameBoard[0][0]=="O")&(gameBoard[0][1]=="O")&(gameBoard[0][2]=="O")){
-			exitGame=true;
-			compWin=true;
-		}
-		if ((gameBoard[1][0]=="O")&(gameBoard[1][1]=="O")&(gameBoard[1][2]=="O")){
-			exitGame=true;
-			compWin=true;
-		}
-		if ((gameBoard[2][0]=="O")&(gameBoard[2][1]=="O")&(gameBoard[2][2]=="O")){
-			exitGame=true;
-			compWin=true;
-		}
-		if ((gameBoard[0][0]=="O")&(gameBoard[1][1]=="O")&(gameBoard[2][2]=="O")){
-			exitGame=true;
-			compWin=true;
-		}
-		// Player Wins out
-		if ((gameBoard[0][0]=="X")&(gameBoard[0][1]=="X")&(gameBoard[0][2]=="X")){
-			exitGame=true;
-			playerWin=true;
-		}
-		if ((gameBoard[1][0]=="X")&(gameBoard[1][1]=="X")&(gameBoard[1][2]=="X")){
-			exitGame=true;
-			playerWin=true;
-		}
-		if ((gameBoard[2][0]=="X")&(gameBoard[2][1]=="X")&(gameBoard[2][2]=="X")){
-			exitGame=true;
-			playerWin=true;
-		}
-		if ((gameBoard[0][0]=="X")&(gameBoard[1][1]=="X")&(gameBoard[2][2]=="X")){
-			exitGame=true;
-			playerWin=true;
-		}
-		return exitGame;
-	}
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.GridLayout;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
 
-	public void displayGameBoard(){
-		for (int r=0;r<3;r++){
-			for(int c=0;c<3;c++){
-				System.out.print(gameBoard[r][c]+" | ");	
-				}
-			System.out.print("\n");
+
+public class TicTacToe extends JFrame
+{
+	private JPanel contentPane;
+	private final String x_Player="X";
+	private final String o_Player="O";
+	private String currentPlayer;
+	private String firstPlayerName;
+	private String secondPlayerName;
+	private boolean Winner=false;
+	private int counter=0;
+	private boolean gameOver=false;
+	
+	JButton button_1 = new JButton();
+	JButton button_2 = new JButton();
+	JButton button_3 = new JButton();
+	JButton button_4 = new JButton();
+	JButton button_5 = new JButton();
+	JButton button_6 = new JButton();
+	JButton button_7 = new JButton();
+	JButton button_8 = new JButton();
+	JButton button_9 = new JButton();	
+	private final JMenuBar menuBar = new JMenuBar();
+	private final JMenu mnGameMenu = new JMenu("Game Menu");
+	private final JButton btnNewGame = new JButton("New Game");
+	private final JTextField playerName_1 = new JTextField();
+	private final JTextField playerName_2 = new JTextField();
+	
+
+	
+	
+	public void setCurrentPlayer(){
+		int answer;
+		firstPlayerName=JOptionPane.showInputDialog("Please enter first player's name: ");
+		//playerName_1.setText("Player X: "+firstPlayerName);
+		//playerName_1.setEditable(false);
+		secondPlayerName=JOptionPane.showInputDialog("Please enter second player's name: ");
+		//playerName_2.setText("Player O: "+secondPlayerName);
+		//playerName_2.setEditable(false);
+		answer=JOptionPane.showConfirmDialog(null, "Do you want to play first, "+firstPlayerName+"?");
+		if (answer==0)
+		{
+			currentPlayer=x_Player;
+		}
+		else
+		{
+			currentPlayer=o_Player;
+		}
+	}
+	
+	public void switchPlayer(){
+		if (currentPlayer==x_Player){
+			currentPlayer=o_Player;
+		}
+		else
+		{
+			if(currentPlayer==o_Player){
+				currentPlayer=x_Player;
 			}
-	}
-	public void displayWinner(){
-		if (compWin)
-		{
-			System.out.println("you lose");
-		}
-		if (playerWin)
-		{
-			System.out.println("you win");
-		}
-		if ((compWin==false)&(playerWin==false))
-		{
-			System.out.println("Tie Game");
 		}
 	}
+	
+	public void checkTieGame(){
+		if ((counter==9)&(Winner==false)){
+			JOptionPane.showMessageDialog(null, "Tie Game Guys !!!");
+			gameOver=true;
+		}
+	}
+	
+	private void checkWinner() {
+		
+		// Check Winner for X_Player
+		
+        if(button_1.getText().equals(x_Player) & button_2.getText().equals(x_Player) & button_3.getText().equals(x_Player)) {
+            JOptionPane.showMessageDialog(null, firstPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+            
+        } else if(button_4.getText().equals(x_Player) && button_5.getText().equals(x_Player) && button_6.getText().equals(x_Player)) {
+            JOptionPane.showMessageDialog(null, firstPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+            
+        } else if(button_7.getText().equals(x_Player) && button_8.getText().equals(x_Player) && button_9.getText().equals(x_Player)) {
+            JOptionPane.showMessageDialog(null, firstPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+            
+        } else if(button_1.getText().equals(x_Player) && button_4.getText().equals(x_Player) && button_7.getText().equals(x_Player)) {
+            JOptionPane.showMessageDialog(null, firstPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+            
+        } else if(button_2.getText().equals(x_Player) && button_5.getText().equals(x_Player) && button_8.getText().equals(x_Player)) {
+            JOptionPane.showMessageDialog(null, firstPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+            
+        } else if(button_3.getText().equals(x_Player) && button_6.getText().equals(x_Player) && button_9.getText().equals(x_Player)) {
+            JOptionPane.showMessageDialog(null, firstPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+            
+        } else if(button_1.getText().equals(x_Player) && button_5.getText().equals(x_Player) && button_9.getText().equals(x_Player)) {
+            JOptionPane.showMessageDialog(null, firstPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+            
+        } else if(button_3.getText().equals(x_Player) && button_5.getText().equals(x_Player) && button_7.getText().equals(x_Player)) {
+            JOptionPane.showMessageDialog(null, firstPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+        }
+        
+        
+        //Check winner for O_Player
+        
+        if(button_1.getText().equals(o_Player) && button_2.getText().equals(o_Player) && button_3.getText().equals(o_Player)) {
+            JOptionPane.showMessageDialog(null, secondPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+        } else if(button_4.getText().equals(o_Player) && button_5.getText().equals(o_Player) && button_6.getText().equals(o_Player)) {
+            JOptionPane.showMessageDialog(null, secondPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+        } else if(button_7.getText().equals(o_Player) && button_8.getText().equals(o_Player) && button_9.getText().equals(o_Player)) {
+            JOptionPane.showMessageDialog(null, secondPlayerName + " has won!"); 
+            Winner=true;
+            gameOver=true;
+        } else if(button_1.getText().equals(o_Player) && button_4.getText().equals(o_Player) && button_7.getText().equals(o_Player)) {
+            JOptionPane.showMessageDialog(null, secondPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+        } else if(button_2.getText().equals(o_Player) && button_5.getText().equals(o_Player) && button_8.getText().equals(o_Player)) {
+            JOptionPane.showMessageDialog(null, secondPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+        } else if(button_3.getText().equals(o_Player) && button_6.getText().equals(o_Player) && button_9.getText().equals(o_Player)) {
+            JOptionPane.showMessageDialog(null, secondPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+        } else if(button_1.getText().equals(o_Player) && button_5.getText().equals(o_Player) && button_9.getText().equals(o_Player)) {
+            JOptionPane.showMessageDialog(null, secondPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+        } else if(button_3.getText().equals(o_Player) && button_5.getText().equals(o_Player) && button_7.getText().equals(o_Player)) {
+            JOptionPane.showMessageDialog(null, secondPlayerName + " has won!");
+            Winner=true;
+            gameOver=true;
+        }
+    }	
+	  
+	private void newGame(){
+		button_1.setText("");
+		button_2.setText("");
+		button_3.setText("");
+		button_4.setText("");
+		button_5.setText("");
+		button_6.setText("");
+		button_7.setText("");
+		button_8.setText("");
+		button_9.setText("");
+		setCurrentPlayer();
+	}
+	
+	
+	
+	
+	
+	
+	
+	//GUI TicTacToe GameBoard Constructor
+	public TicTacToe() 
+	{
+		setTitle("Tic Tac Toe Game");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(600, 600);
+		setBounds(400, 400, 400, 400);
+		setJMenuBar(menuBar);		
+		menuBar.add(mnGameMenu);
+		btnNewGame.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				newGame();
+			}
+		});
+		mnGameMenu.add(btnNewGame);
+		contentPane = new JPanel();
+		setContentPane(contentPane);
+		contentPane.setLayout(new GridLayout(0, 3, 0, 0));
+		
+		playerName_1.setColumns(50);
+		setCurrentPlayer();
+		
+		
+		
+		contentPane.add(button_1);
+		button_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent evt) {
+				if(button_1.getText()=="")
+				{
+					button_1.setText(currentPlayer);
+					switchPlayer();
+					counter++;
+				}
+				else
+				{
+					
+				}
+				checkWinner();
+				checkTieGame();
+			}
+		});
+		
+		button_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(button_2.getText()=="")
+				{
+					button_2.setText(currentPlayer);
+					switchPlayer();
+					counter++;
+				}
+				else
+				{
+					
+				}
+				checkWinner();
+				checkTieGame();
+			}
+		});
+		contentPane.add(button_2);
+		
+		
+		button_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(button_3.getText()=="")
+				{
+					button_3.setText(currentPlayer);
+					switchPlayer();
+					counter++;
+				}
+				else
+				{
+					
+				}
+				checkWinner();
+				checkTieGame();
+			}
+		});
+		contentPane.add(button_3);
+		
+		
+		button_4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(button_4.getText()=="")
+				{
+					button_4.setText(currentPlayer);
+					switchPlayer();
+					counter++;
+				}
+				else
+				{
+					
+				}
+				checkWinner();
+				checkTieGame();
+			}
+		});
+		contentPane.add(button_4);
+		
+	
+		button_5.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(button_5.getText()=="")
+				{
+					button_5.setText(currentPlayer);
+					switchPlayer();
+					counter++;
+				}
+				else
+				{
+					
+				}
+				checkWinner();
+				checkTieGame();
+			}
+		});
+		contentPane.add(button_5);
+		
+	
+		button_6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(button_6.getText()=="")
+				{
+					button_6.setText(currentPlayer);
+					switchPlayer();
+					counter++;
+				}
+				else
+				{
+					
+				}
+				checkWinner();
+				checkTieGame();
+			}
+		});
+		contentPane.add(button_6);
+		
+	
+		button_7.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(button_7.getText()=="")
+				{
+					button_7.setText(currentPlayer);
+					switchPlayer();
+					counter++;
+				}
+				else
+				{
+					
+				}
+				checkWinner();
+				checkTieGame();
+			}
+		});
+		contentPane.add(button_7);
+		
+		button_8.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(button_8.getText()=="")
+				{
+					button_8.setText(currentPlayer);
+					switchPlayer();
+					counter++;
+				}
+				else
+				{
+					
+				}
+				checkWinner();
+				checkTieGame();
+			}
+		});
+		contentPane.add(button_8);
+		
+	
+		button_9.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(button_9.getText()=="")
+				{
+					button_9.setText(currentPlayer);
+					switchPlayer();
+					counter++;
+				}
+				else
+				{
+					
+				}
+				checkWinner();
+				checkTieGame();
+			}
+		});
+		contentPane.add(button_9);
+		
+		
+		contentPane.add(playerName_1);
+		playerName_2.setColumns(50);
+		contentPane.add(playerName_2);
+	}	
 }
