@@ -398,3 +398,5 @@ public class TicTacToe extends JFrame
 		contentPane.add(playerName_2);
 	}	
 }
+
+// Please separate the game logic from the GUI
